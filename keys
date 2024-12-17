@@ -1,0 +1,37 @@
+#!/bin/bash
+
+truststore=''
+keystorename=''
+
+print_usage() {
+  printf "Usage:
+  -n название keystore
+  -t название truststore"
+}
+
+while getopts 'n:t:' flag; do
+  case "${flag}" in
+    t) truststore="${OPTARG}" ;;
+    n) keystorename="${OPTARG}" ;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+
+# Генерация сертификатов
+keytool -genkeypair -alias $keystorename -keyalg RSA -keysize 2048 \
+-storetype PKCS12 -keystore $keystorename.p12 \
+-validity 365 -dname "CN=$keystorename.localhost, OU=IT, O=MyCompany, L=City, ST=State, C=Country" \
+-storepass changeit
+
+# не разобрался как корректно создать trust store,
+# поэтому экспортирую CA сертификат и импортирую его в trust store вручную
+if [[ ! -z "$truststore" ]]
+then
+    # экспортируем публичный сертификатов из $keystorename.p12 в формате rfc
+    keytool -exportcert -alias $keystorename -keystore $keystorename.p12 -file $keystorename.cert -storepass changeit -rfc
+
+    # импортируем его в общий truststore
+    keytool -import -file $keystorename.cert -keystore $truststore -storetype PKCS12 -storepass changeit
+fi
+
