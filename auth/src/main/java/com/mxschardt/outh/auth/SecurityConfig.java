@@ -98,7 +98,7 @@ public class SecurityConfig {
                 .clientSettings(
                         ClientSettings.builder()
                                 .requireAuthorizationConsent(true)
-//                                .requireProofKey(true)
+                                .requireProofKey(true)
                                 .build())
                 .build();
 
