@@ -84,12 +84,10 @@ public class SecurityConfig {
         RegisteredClient weweClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("wewe-client")
                 .clientSecret("{noop}secret")
-//                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .authorizationGrantTypes(auth -> {
-//                    auth.add(AuthorizationGrantType.AUTHORIZATION_CODE);
-//                    auth.add(AuthorizationGrantType.REFRESH_TOKEN);
+                    auth.add(AuthorizationGrantType.AUTHORIZATION_CODE);
+                    auth.add(AuthorizationGrantType.REFRESH_TOKEN);
                     auth.add(AuthorizationGrantType.CLIENT_CREDENTIALS);
                 })
                 .redirectUri("http://wewe-client:8080/login/oauth2/code/wewe-client")

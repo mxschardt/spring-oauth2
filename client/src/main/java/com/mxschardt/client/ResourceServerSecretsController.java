@@ -7,21 +7,37 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId;
 
-// Настройка клиентского сервера для работы с сервером ресурсов с grant_type=client_credentials.
+// Настройка клиентского сервера для работы с сервером ресурсов.
 @RestController
-public class AuthorizationController {
+public class ResourceServerSecretsController {
 
     private final WebClient webClient;
     private final String resourceServerBaseUri;
 
-    public AuthorizationController(WebClient webClient,
-                                   @Value("${resourceServer.baseUri}") String messagesBaseUri) {
+    public ResourceServerSecretsController(WebClient webClient,
+                                           @Value("${resourceServer.baseUri}") String messagesBaseUri) {
         this.webClient = webClient;
         this.resourceServerBaseUri = messagesBaseUri;
     }
 
-    @GetMapping(value = "/authorize", params = "grant_type=client_credentials")
-    public String clientCredentialsGrant() {
+    @GetMapping("/")
+    public String getHello() {
+        return "hello";
+    }
+
+    @GetMapping("/secrets")
+    public String getSecretsWithAuthorizationCode() {
+        return webClient
+                .get()
+                .uri(this.resourceServerBaseUri)
+                .attributes(clientRegistrationId("wewe-client-authorization-code"))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+
+    @GetMapping(value = "/secrets", params = "grant_type=client_credentials")
+    public String getSecretsWithClientCredentials() {
         return this.webClient
                 .get()
                 .uri(this.resourceServerBaseUri)

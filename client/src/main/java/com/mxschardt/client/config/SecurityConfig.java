@@ -1,4 +1,4 @@
-package com.mxschardt.client;
+package com.mxschardt.client.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +16,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/secured").authenticated();
+                    // Запросы к серверу ресурсов по Authorization Code Flow
+                    //      автоматически требуют авторизации у сервера аутентификации.
+//                   auth.requestMatchers("/secured").authenticated();
                     auth.anyRequest().permitAll();
                 })
-                .oauth2Login(Customizer.withDefaults()); // Еще не имплементировано.
+                .oauth2Login(Customizer.withDefaults());
         return http.build();
     }
 

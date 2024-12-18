@@ -1,33 +1,5 @@
 spring:
   application.name: client
-  security:
-    oauth2:
-      client:
-        registration:
-          # Client Credentials Flow
-          wewe-client-client-credentials:
-            provider: spring
-            client-id: wewe-client
-            client-secret: "{noop}secret"
-            authorization-grant-type: client_credentials
-            scope:
-              - openid
-              - profile
-              - read
-            client-name: wewe-client-client-credentials
-
-          # Authorization Code Flow
-#         wewe-authorization-code:
-#           provider: sprting
-#           client-id: wewe-client
-#           client-secret: "secret"
-#           authorization-grant-type: authorization_code
-#           redirect-uri: "http://wewe-client:8080/authorized"
-#           scope: message.read,message.write
-#           client-name: wewe-client-authorization-code
-        provider:
-          spring:
-            issuer-uri: http://wewe-auth:9001
 
 resourceServer.baseUri: http://wewe-resource:9002/secrets
 
@@ -56,7 +28,10 @@ logging:
     org.apache.http.wire: TRACE
 
 logbook:
-  filter.enabled: false
-  secure-filter.enabled: false
+  filter.enabled: true
+  secure-filter.enabled: true
   format.style: http
   minimum-status: 200
+  write:
+    body:
+      max-size: 4096
