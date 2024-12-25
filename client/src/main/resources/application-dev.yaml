@@ -1,0 +1,72 @@
+resourceServer:
+  baseUri: http://wewe-resource:9002/secrets
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          wewe-client-authorization-code:
+            client-id: wewe-client
+            client-secret: "{noop}secret"
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/wewe-client"
+            scope:
+              - openid
+              - profile
+              - read
+            client-name: "Wewe Auth"
+            provider: wewe-auth
+          wewe-client-client-credentials:
+            client-id: wewe-client
+            client-secret: "{noop}secret"
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
+            redirect-uri: "{baseUrl}/login/oauth2/code/wewe-client"
+            scope:
+              - openid
+              - profile
+              - read
+            client-name: "Wewe Auth Client Credentials"
+            provider: wewe-auth
+        provider:
+          wewe-auth:
+            issuer-uri: "http://wewe-auth:9001"
+            authorization-uri: "http://wewe-auth:9001/oauth2/authorize"
+            token-uri: "http://wewe-auth:9001/oauth2/token"
+            jwk-set-uri: "http://wewe-auth:9001/oauth2/jwks"
+
+
+logging:
+  level:
+    # Уровень логирования для Spring Boot
+    org.springframework.boot: TRACE
+    # Уровень логирования для всего Spring Security
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    org.springframework.security.oauth2.client: TRACE
+    org.springframework.security.oauth2.server.resource: TRACE
+    org.springframework.security.web: TRACE
+    org.springframework.security.authentication: TRACE
+    # Уровень логирования для Spring Cloud Gateway (если используется)
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty.http.client: TRACE
+    reactor.netty.http.server: TRACE
+    # Уровень логирования для веб-запросов (если используется RestTemplate или WebClient)
+    org.springframework.web.client.RestTemplate: TRACE
+    org.springframework.web.reactive.function.client: TRACE
+    org.springframework.web: TRACE
+    # Уровень логирования для HTTP-запросов (используя сторонний Logbook)
+    org.zalando.logbook: TRACE
+    org.apache.http: TRACE
+    org.apache.http.wire: TRACE
+
+logbook:
+  filter.enabled: true
+  secure-filter.enabled: true
+  format.style: http
+  minimum-status: 200
+  write:
+    body:
+      max-size: 4096

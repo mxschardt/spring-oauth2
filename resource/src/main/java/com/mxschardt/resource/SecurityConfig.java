@@ -5,9 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -26,12 +23,6 @@ public class SecurityConfig {
                         .jwt(Customizer.withDefaults())
                 );
         return http.build();
-    }
-
-    // Декодер подгружаем с сервера аутентификации.
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromIssuerLocation("http://wewe-auth:9001");
     }
 
 }

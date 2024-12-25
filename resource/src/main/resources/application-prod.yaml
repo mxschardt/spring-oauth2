@@ -1,0 +1,9 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://wewe-auth:9001/oauth2/jwks
+
+server:
+  port: 9002

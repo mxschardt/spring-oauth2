@@ -1,0 +1,41 @@
+resourceServer:
+  baseUri: http://wewe-resource:9002/secrets
+
+secrets:
+  client-secret: ${CLIENT_SECRET}
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          wewe-client-authorization-code:
+            client-id: wewe-client
+            client-secret: ${secrets.client-secret}
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/wewe-client"
+            scope:
+              - openid
+              - profile
+              - read
+            client-name: "Wewe Auth"
+            provider: wewe-auth
+          wewe-client-client-credentials:
+            client-id: wewe-client
+            client-secret: ${secrets.client-secret}
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
+            redirect-uri: "{baseUrl}/login/oauth2/code/wewe-client"
+            scope:
+              - openid
+              - profile
+              - read
+            client-name: "Wewe Auth Client Credentials"
+            provider: wewe-auth
+        provider:
+          wewe-auth:
+            issuer-uri: "http://wewe-auth:9001"
+            authorization-uri: "http://wewe-auth:9001/oauth2/authorize"
+            token-uri: "http://wewe-auth:9001/oauth2/token"
+            jwk-set-uri: "http://wewe-auth:9001/oauth2/jwks"
